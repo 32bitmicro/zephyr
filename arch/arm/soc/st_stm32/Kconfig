@@ -1,0 +1,82 @@
+# Kconfig - ST STM32 family SOC configuration options
+
+#
+# Copyright (c) 2016 Intel Corporation.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+choice
+        prompt "Select the ST MCU in use"
+
+config SOC_ST_STM32F2XX
+	bool
+	default n
+
+config SOC_ST_STM32F1XX
+        bool
+        default n
+
+endchoice
+
+config NUM_IRQ_PRIO_BITS
+	int
+	default 3
+
+config SYS_CLOCK_HW_CYCLES_PER_SEC
+	int
+	default 84000000
+
+config SRAM_BASE_ADDRESS
+	default 0x20000000
+
+config FLASH_BASE_ADDRESS
+	default 0x08000000
+
+config PERIPHERIAL_BASE_ADDRESS
+        hex
+        default 0x40000000
+        help
+        The memory address for the Peripherial register location.
+
+config VECTOR_TABLE_IN_SRAM
+        bool
+        default false
+        help
+        If you need to relocate the vector table to internal SRAM, set this
+        value to true.
+
+choice
+        prompt "Select the clock source for the PLL"
+        default SOC_ST_STM32_CLOCK_HSE
+        depends on SOC_ST_STM32
+
+config SOC_ST_STM32_CLOCK_HSE
+        bool "Use the High Speed External clock signal (HSE)"
+
+config SOC_ST_STM32_CLOCK_HSI
+        bool "Use the High Speed Internal clock signal (HSI)"
+
+endchoice
+
+config KERNEL_INIT_PRIORITY_DEFAULT
+	default 40
+
+config KERNEL_INIT_PRIORITY_DEVICE
+	default 50
+
+#
+# Parse through the various supported SOCs to override any values here
+#
+source "arch/arm/soc/stm32/Kconfig.soc.stm32f103*"
+source "arch/arm/soc/stm32/Kconfig.soc.stm32f2xx"
