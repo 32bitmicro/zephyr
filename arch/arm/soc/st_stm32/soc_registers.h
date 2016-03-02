@@ -50,7 +50,7 @@ struct __rcc {
 	uint32_t	reserved_2;	/* offset 0x3C */
 	uint32_t	apb1enr;	/* offset 0x40 */
 	uint32_t	apb2enr;	/* offset 0x44 */
-	uint32_t	reserved_3[2]	/* offset 0x48+0x4C */
+	uint32_t	reserved_3[2];	/* offset 0x48+0x4C */
 };
 
 /* GPIOx Controller Registers */

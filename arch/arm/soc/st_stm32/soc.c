@@ -43,7 +43,7 @@ extern void _NmiInit(void);
  * Assumption:
  * SLCK = 32.768kHz
  */
-#if defined(SOC_ST_STM32_CLOCK_HSE)
+#if defined(CONFIG_SOC_ST_STM32_CLOCK_HSE)
 static void clock_init(void)
 {
 	uint32_t tmp;
@@ -99,16 +99,15 @@ static void clock_init(void)
 	}
 
 }
-#elif defined(SOC_ST_STM32_CLOCK_HSI)
+#elif defined(CONFIG_SOC_ST_STM32_CLOCK_HSI)
 static void clock_init(void)
 {
-	uint32_t tmp;
 	uint32_t rc = 0;
 
 	RCC->cr |= RCC_CR_HSION;
 
 	/*
-	 * Time to spin until the HSE is ready.
+	 * Time to spin until the HSI is ready.
 	 */
 	while (RCC->cr & RCC_CR_HSIRDY) {
 		rc = RCC->cr & RCC_CR_HSIRDY;
@@ -150,7 +149,7 @@ static void clock_init(void)
 	RCC->cfgr |= RCC_CFGR_SW_PLL;
 
 	/* Once again, spin until this change is ready */
-	while ((RCC->cfgr & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL) {
+	while ((RCC->cfgr & RCC_CFGR_SWS_MASK) != RCC_CFGR_SWS_PLL) {
 		/* do nothing */
 	}
 }
@@ -169,12 +168,6 @@ static int st_stm32_init(struct device *arg)
 	uint32_t key;
 
 	ARG_UNUSED(arg);
-
-	/* Note:
-	 * Magic numbers below are obtained by reading the registers
-	 * when the SoC was running the SAM-BA bootloader
-	 * (with reserved bits set to 0).
-	 */
 
 	key = irq_lock();
 

@@ -381,6 +381,8 @@
 /* SYSCLK = PLL:VCO / STM32F2XX_PLL_P */
 #define STM32F2XX_PLL_P			2
 
+/*  STM32F2XX_PLL_Q */
+#define STM32F2XX_PLL_Q			1
 /*
  * The following addresses all come from ST Document ID 15818 Rev 7,
  * Figure 14 - Memory Map
@@ -481,8 +483,8 @@
 /* uart configuration settings */
 #define UART_IRQ_FLAGS 0
 
-#define __RCC		((volatile struct __rcc *)RCC_BASE)
-#define __SYSCFG	((volatile struct __syscfg *)SYSCFG_BASE)
+#define RCC		((volatile struct __rcc *)RCC_BASE)
+#define SYSCFG	((volatile struct __syscfg *)SYSCFG_BASE)
 
 /* PIO Registers struct */
 #define __PIOA		((volatile struct __gpio *)PIOA_ADDR)

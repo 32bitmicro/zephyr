@@ -16,23 +16,67 @@
 # limitations under the License.
 #
 
-choice
-        prompt "Select the ST MCU in use"
-
-config SOC_ST_STM32F4XX
-	bool
-	default n
-
 config SOC_ST_STM32F2XX
 	bool
 	default n
+	
+config SOC_ST_STM32F4XX
+	bool
+	default n
+	
+if SOC_ST_STM32F2XX
 
-config SOC_ST_STM32F1XX
-        bool
-        default n
+config SOC
+	default st_stm32
+	
+config NUM_IRQS
+	int
+	default 140
 
-endchoice
+config SRAM_SIZE
+	default 128
 
+config FLASH_SIZE
+	default 1024
+
+config FSMC_REGISTER_BASE_ADDRESS
+        hex
+        default 0xA0000000
+        help
+        This is the memory address for the Flexlible Static Memory Controller
+        (FSMC) registers.
+	
+endif #SOC_ST_STM32F2XX
+
+if SOC_ST_STM32F4XX
+
+config SOC
+	default st_stm32
+
+config NUM_IRQS
+	int
+	default 140
+
+config SRAM_SIZE
+	default 128
+
+config FLASH_SIZE
+	default 512
+
+config FSMC_REGISTER_BASE_ADDRESS
+        hex
+        default 0xA0000000
+        help
+        This is the memory address for the Flexlible Static Memory Controller
+        (FSMC) registers.
+	
+endif #SOC_ST_STM32F4XX
+	
+	
+config SOC_ST_STM32_CLOCK_HSI
+	bool
+	default y
+	
 config NUM_IRQ_PRIO_BITS
 	int
 	default 3
@@ -82,5 +126,5 @@ config KERNEL_INIT_PRIORITY_DEVICE
 #
 # Parse through the various supported SOCs to override any values here
 #
-source "arch/arm/soc/stm32/Kconfig.soc.stm32f103*"
-source "arch/arm/soc/stm32/Kconfig.soc.stm32f2xx"
+source "arch/arm/soc/stm32/Kconfig.soc.stm32f2xx*"
+source "arch/arm/soc/stm32/Kconfig.soc.stm32f4xx*"

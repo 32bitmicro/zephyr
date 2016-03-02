@@ -15,11 +15,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+	
 if SOC_ST_STM32F2XX
-
-config SOC
-	default st_stm32f2xx
 
 config NUM_IRQS
 	int
