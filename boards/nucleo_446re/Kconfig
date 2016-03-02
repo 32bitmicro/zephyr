@@ -4,4 +4,8 @@ if BOARD_NUCLEO_446RE
 config BOARD
         default nucleo_446re
 
+config SOC_ST_STM32_CLOCK_HSI
+       bool
+       default y
+
 endif # BOARD_NUCLEO_446RE 
