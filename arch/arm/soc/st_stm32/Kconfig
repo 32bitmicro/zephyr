@@ -19,6 +19,10 @@
 choice
         prompt "Select the ST MCU in use"
 
+config SOC_ST_STM32F4XX
+	bool
+	default n
+
 config SOC_ST_STM32F2XX
 	bool
 	default n
