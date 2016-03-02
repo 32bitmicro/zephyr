@@ -40,7 +40,7 @@ struct __rcc {
 	uint32_t	ahb1rstr;	/* offset 0x10 */
 	uint32_t	ahb2rstr;	/* offset 0x14 */
 	uint32_t	ahb3rstr;	/* offset 0x18 */
-	uint32_t	reserved_0	/* offset 0x1C */
+	uint32_t	reserved_0;	/* offset 0x1C */
 	uint32_t	apb1rstr;	/* offset 0x20 */
 	uint32_t	apb2rstr;	/* offset 0x24 */
 	uint32_t	reserved_1[2];	/* offset 0x28+0x2C */
@@ -66,6 +66,7 @@ struct __gpio {
 	uint32_t	afr[2];		/* offset 0x20 */
 };
 
+/* Advanced-control timers */
 struct __tim {
 	uint16_t	cr_1;
 	uint16_t	reserved_0;
@@ -91,57 +92,22 @@ struct __tim {
 	uint16_t	reserved_10;
 	uint16_t	arr;
 	uint16_t	reserved_11;
-	uint16_t	psc;
-	uint16_t	reserved_12;
-	uint16_t	arr;
-	uint16_t	reserved_13;
 	uint16_t	rcr;
-	uint16_t	reserved_14;
+	uint16_t	reserved_12;
 	uint32_t	ccr1;
+	uint16_t	reserved_13;
 	uint32_t	ccr2;
+	uint16_t	reserved_14;
 	uint32_t	ccr3;
-	uint32_t	ccr4;
-	uint16_t	bdtr;
 	uint16_t	reserved_15;
-	uint16_t	dcr;
+	uint32_t	ccr4;
 	uint16_t	reserved_16;
-	uint16_t	dmar;
+	uint16_t	bdtr;
 	uint16_t	reserved_17;
+	uint16_t	dcr;
+	uint16_t	reserved_18;
+	uint16_t	dmar;
+	uint16_t	reserved_19;
 };
-
-
-
-/*
- **************************
- **************************
- **************************
- **************************
- *
- * Atmel parts
- *
- **************************
- **************************
- **************************
- **************************/
-
-/* Enhanced Embedded Flash Controller */
-struct __eefc {
-	uint32_t	fmr;	/* 0x00 Flash Mode Register    */
-	uint32_t	fcr;	/* 0x04 Flash Command Register */
-	uint32_t	fsr;	/* 0x08 Flash Status Register  */
-	uint32_t	frr;	/* 0x0C Flash Result Register  */
-};
-
-
-/* Supply Controller (SUPC) */
-struct __supc {
-	uint32_t	cr;	/* 0x00 Control                     */
-	uint32_t	smmr;	/* 0x04 Supply Monitor Mode         */
-	uint32_t	mr;	/* 0x08 Mode                        */
-	uint32_t	wumr;	/* 0x0C Wake Up Mode                */
-	uint32_t	wuir;	/* 0x10 Wake Up Inputs              */
-	uint32_t	sr;	/* 0x14 Status                      */
-};
-
 
 #endif /* _ST_STM32MF2XX_SOC_REGS_H_ */
