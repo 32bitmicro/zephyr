@@ -1,4 +1,5 @@
 /*
+ * Copyright (c) 2016 Pawel Wodnicki 32bitmicro.com
  * Copyright (c) 2016 Intel Corporation.
  * Copyright (c) 2013-2015 Wind River Systems, Inc.
  *
@@ -43,75 +44,29 @@ extern void _NmiInit(void);
  * Assumption:
  * SLCK = 32.768kHz
  */
-#if defined(CONFIG_SOC_ST_STM32_CLOCK_HSE)
 static void clock_init(void)
 {
-	uint32_t tmp;
-	uint32_t rc = 0;
-
+	uint32_t regtmp = 0;
+#if defined(CONFIG_SOC_ST_STM32_CLOCK_HSE)
 	RCC->cr |= RCC_CR_HSEON;
 
 	/*
 	 * Time to spin until the HSE is ready.
 	 */
 	while (!(RCC->cr & RCC_CR_HSERDY)) {
-		rc = RCC->cr & RCC_CR_HSERDY;
+		regtmp = RCC->cr & RCC_CR_HSERDY;
 	}
-
-	/*
-	 * This will setup the following values:
-	 * * HCLK = SYSCLK / 1
-	 * * PCLK2 = HCLK  / 2
-	 * * PCLK1 = HCLK  / 4
-	 */
-	RCC->cfgr |= ( RCC_CFGR_HPRE_0 | RCC_CFGR_PPRE_2_2 | RCC_CFGR_PPRE_1_4);
-
-	/*
-	 * Now that the CLK is setup, configure the main PLL
-	 */
-	RCC->pllcfgr = STM32F2XX_PLL_M |
-			(STM32F2XX_PLL_N << 6) |
-			(((STM32F2XX_PLL_P >> 1) - 1) << 16) |
-			(STM32F2XX_PLL_Q << 24);
-
-	/*
-	 * If everything has gone right, at this point we can enable the PLL
-	 */
-	RCC->cr |= RCC_CR_PLLON;
-
-	/*
-	 * Now spin until the PLL is ready
-	 */
-	while ((RCC->cr & RCC_CR_PLLRDY) == 0) {
-		/* do nothing */
-	}
-
-	/*
-	 * The PLL is now ready! First clear out any possible values, then
-	 * select it as the system clock source
-	 */
-	RCC->cfgr &= ~(RCC_CFGR_SW_MASK);
-	RCC->cfgr |= RCC_CFGR_SW_PLL;
-
-	/* Once again, spin until this change is ready */
-	while ((RCC->cfgr & RCC_CFGR_SWS) != RCC_CFGR_SWS_PLL) {
-		/* do nothing */
-	}
-
-}
 #elif defined(CONFIG_SOC_ST_STM32_CLOCK_HSI)
-static void clock_init(void)
-{
-	uint32_t rc = 0;
-
 	RCC->cr |= RCC_CR_HSION;
-
 	/*
 	 * Time to spin until the HSI is ready.
 	 */
 	while (!(RCC->cr & RCC_CR_HSIRDY)) {
-		rc = RCC->cr & RCC_CR_HSIRDY;
+		regtmp = RCC->cr & RCC_CR_HSIRDY;
 	}
+
+#endif
+
 
 	/*
 	 * This will setup the following values:
@@ -127,6 +82,11 @@ static void clock_init(void)
 #ifdef CONFIG_SOC_ST_STM32F2XX
 	RCC->pllcfgr = STM32F2XX_PLL_M |
 			(STM32F2XX_PLL_N << 6) |
+#if defined(CONFIG_SOC_ST_STM32_CLOCK_HSE)
+			(RCC_CFGR_PLLSRC_HSE) |
+#elif defined(CONFIG_SOC_ST_STM32_CLOCK_HSI)
+			(RCC_CFGR_PLLSRC_HSI) |
+#endif
 			(((STM32F2XX_PLL_P >> 1) - 1) << 16) |
 			(STM32F2XX_PLL_Q  << 24);
 #endif
@@ -134,6 +94,11 @@ static void clock_init(void)
 #ifdef CONFIG_SOC_ST_STM32F4XX
 	RCC->pllcfgr = STM32F4XX_PLL_M |
 			(STM32F4XX_PLL_N << 6) |
+#if defined(CONFIG_SOC_ST_STM32_CLOCK_HSE)
+			(RCC_CFGR_PLLSRC_HSE) |
+#elif defined(CONFIG_SOC_ST_STM32_CLOCK_HSI)
+			(RCC_CFGR_PLLSRC_HSI) |
+#endif
 			(((STM32F4XX_PLL_P >> 1) - 1) << 16) |
 			(STM32F4XX_PLL_Q << 24) |
 			(STM32F4XX_PLL_R << 28);
@@ -155,15 +120,16 @@ static void clock_init(void)
 	 * The PLL is now ready! First clear out any possible values, then
 	 * select it as the system clock source
 	 */
-	RCC->cfgr &= ~(RCC_CFGR_SW_MASK);
-	RCC->cfgr |= RCC_CFGR_SW_PLL;
+	regtmp = RCC->cfgr;
+	regtmp &= ~(RCC_CFGR_SW_MASK);
+	regtmp |= RCC_CFGR_SW_PLL;
+	RCC->cfgr = regtmp;
 
 	/* Once again, spin until this change is ready */
 	while ((RCC->cfgr & RCC_CFGR_SWS_MASK) != RCC_CFGR_SWS_PLL) {
 		/* do nothing */
 	}
 }
-#endif
 
 /**
  * @brief Perform basic hardware initialization at boot for STM32.

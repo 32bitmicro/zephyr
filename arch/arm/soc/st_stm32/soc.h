@@ -85,7 +85,7 @@
 #define RCC_CFGR_SW_MASK	0x00000003
 #define RCC_CFGR_SW_HSI		0x00000000  /* set system clock = HSI */
 #define RCC_CFGR_SW_HSE		0x00000001  /* set system clock = HSE */
-#define RCC_CFGR_SW_PLL		0x00000010  /* set system clock = PLL */
+#define RCC_CFGR_SW_PLL		0x00000002  /* set system clock = PLL */
 
 #define RCC_CFGR_SWS_MASK	0x0000000C
 #define RCC_CFGR_SWS_HSI	0x00000000  /* system clock = HSI */
@@ -126,6 +126,8 @@
 #define RCC_CFGR_MCO_1_PLL	0x00600000
 
 #define RCC_CFGR_I2SSRC		0x00800000
+#define RCC_CFGR_PLLSRC_HSI	0x00000000
+#define RCC_CFGR_PLLSRC_HSE	0x00800000
 
 #define RCC_CFGR_MCO_1_PRE	0x07000000
 #define RCC_CFGR_MCO_1_PRE_0	0x00000000
