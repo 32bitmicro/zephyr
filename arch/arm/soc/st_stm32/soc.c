@@ -128,15 +128,15 @@ static void clock_init(void)
 	RCC->pllcfgr = STM32F2XX_PLL_M |
 			(STM32F2XX_PLL_N << 6) |
 			(((STM32F2XX_PLL_P >> 1) - 1) << 16) |
-			(((STM32F2XX_PLL_Q >> 1) - 1) << 24);
+			(STM32F2XX_PLL_Q  << 24);
 #endif
 
 #ifdef CONFIG_SOC_ST_STM32F4XX
 	RCC->pllcfgr = STM32F4XX_PLL_M |
 			(STM32F4XX_PLL_N << 6) |
 			(((STM32F4XX_PLL_P >> 1) - 1) << 16) |
-			(((STM32F4XX_PLL_Q >> 1) - 1) << 24) |
-			(((STM32F4XX_PLL_R >> 1) - 1) << 28);
+			(STM32F4XX_PLL_Q << 24) |
+			(STM32F4XX_PLL_R << 28);
 #endif
 
 	/*
