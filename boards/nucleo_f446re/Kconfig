@@ -1,0 +1,11 @@
+
+if BOARD_NUCLEO_F446RE
+
+config BOARD
+        default nucleo_f446re
+
+config SOC_ST_STM32_CLOCK_HSI
+       bool
+       default y
+
+endif # BOARD_NUCLEO_F446RE 
