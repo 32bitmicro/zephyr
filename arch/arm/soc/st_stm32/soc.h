@@ -374,6 +374,7 @@
  * Pieces needed for setting up the clock
  */
 
+/* STM32F2XX */
 /* PLL:VCO = (HSE_VALUE | HSI_VALUE) / PLL_M) * PLL_N */
 #define STM32F2XX_PLL_M			26
 #define STM32F2XX_PLL_N			240
@@ -382,7 +383,23 @@
 #define STM32F2XX_PLL_P			2
 
 /*  STM32F2XX_PLL_Q */
-#define STM32F2XX_PLL_Q			1
+#define STM32F2XX_PLL_Q			7
+
+/* STM32F4XX */
+/* PLL:VCO = (HSE_VALUE | HSI_VALUE) / PLL_M) * PLL_N */
+#define STM32F4XX_PLL_M			16
+#define STM32F4XX_PLL_N			336
+
+/* SYSCLK = PLL:VCO / STM32F4XX_PLL_P */
+#define STM32F4XX_PLL_P			2
+
+/* CLK48 = PLL:VCO / STM32F4XX_PLL_Q  */
+/*  STM32F4XX_PLL_Q */
+#define STM32F4XX_PLL_Q			7
+
+/*  STM32F4XX_PLL_R */
+#define STM32F4XX_PLL_R			2
+
 /*
  * The following addresses all come from ST Document ID 15818 Rev 7,
  * Figure 14 - Memory Map

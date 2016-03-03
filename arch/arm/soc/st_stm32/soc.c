@@ -124,10 +124,20 @@ static void clock_init(void)
 	/*
 	 * Now that the CLK is setup, configure the main PLL
 	 */
+#ifdef CONFIG_SOC_ST_STM32F2XX
 	RCC->pllcfgr = STM32F2XX_PLL_M |
 			(STM32F2XX_PLL_N << 6) |
 			(((STM32F2XX_PLL_P >> 1) - 1) << 16) |
-			(STM32F2XX_PLL_Q << 24);
+			(((STM32F2XX_PLL_Q >> 1) - 1) << 24);
+#endif
+
+#ifdef CONFIG_SOC_ST_STM32F4XX
+	RCC->pllcfgr = STM32F4XX_PLL_M |
+			(STM32F4XX_PLL_N << 6) |
+			(((STM32F4XX_PLL_P >> 1) - 1) << 16) |
+			(((STM32F4XX_PLL_Q >> 1) - 1) << 24) |
+			(((STM32F4XX_PLL_R >> 1) - 1) << 28);
+#endif
 
 	/*
 	 * If everything has gone right, at this point we can enable the PLL
