@@ -54,7 +54,7 @@ static void clock_init(void)
 	/*
 	 * Time to spin until the HSE is ready.
 	 */
-	while (RCC->cr & RCC_CR_HSERDY) {
+	while (!(RCC->cr & RCC_CR_HSERDY)) {
 		rc = RCC->cr & RCC_CR_HSERDY;
 	}
 
@@ -109,7 +109,7 @@ static void clock_init(void)
 	/*
 	 * Time to spin until the HSI is ready.
 	 */
-	while (RCC->cr & RCC_CR_HSIRDY) {
+	while (!(RCC->cr & RCC_CR_HSIRDY)) {
 		rc = RCC->cr & RCC_CR_HSIRDY;
 	}
 
